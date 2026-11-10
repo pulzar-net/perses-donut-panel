@@ -97,6 +97,8 @@ export function PulzrDonutPanelComponent({
         gridTemplateColumns: under ? 'minmax(0, 1fr)' : `${size}px minmax(0, 1fr)`,
         justifyItems,
         alignItems: 'center',
+        // Under the donut, the table follows it at the top rather than the rows sharing the panel's height.
+        alignContent: under ? 'start' : undefined,
         gap: '16px',
         width,
         height,
@@ -170,10 +172,12 @@ export function PulzrDonutPanelComponent({
             '& tbody tr:last-of-type td': { borderBottom: 'none' },
           }}
         >
-          {columns.some((c) => c.title) && (
+          {(spec.nameTitle || columns.some((c) => c.title)) && (
             <thead>
               <tr>
-                <th aria-label="Name" />
+                <th aria-label="Name" style={{ textAlign: 'left' }}>
+                  {spec.nameTitle}
+                </th>
                 {columns.map((c) => (
                   <th key={keyOf(c)}>{c.title}</th>
                 ))}

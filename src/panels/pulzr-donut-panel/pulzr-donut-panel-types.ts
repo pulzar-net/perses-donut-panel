@@ -43,6 +43,8 @@ export interface PulzrDonutPanelOptions {
   limit?: number;
   /** `side`: the table beside the donut; `stacked`: the donut on top, the table under it. `side` unless set. */
   layout?: 'side' | 'stacked';
+  /** The header over the slices' names: `Kind`. */
+  nameTitle?: string;
   /** The donut's radii as percentages (62% and 100% unless set), the gap between slices in degrees, its largest diameter in px, the card-colored edge round each slice in px (2 unless set). */
   size?: { inner?: string; outer?: string; padAngle?: number; max?: number; edge?: number };
   /** A line under each row of the table; true unless set. */

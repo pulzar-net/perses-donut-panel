@@ -40,6 +40,7 @@ spec: close({
 	limit?: int & >=2
 	// The table beside the donut, or under it.
 	layout?: "side" | "stacked"
+	nameTitle?: string
 	// The donut's radii as percentages, the gap between slices in degrees, its largest diameter in px.
 	size?: close({
 		inner?:    =~"^[0-9]+(\\.[0-9]+)?%$"

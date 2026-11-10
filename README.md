@@ -27,6 +27,7 @@ spec:
 - `columns`: the table's columns after each slice's swatch and name, each with a `title`. `share: true` is the slice's share of the total, a whole percent; `field: payers` is the `<category> · payers` series' value; a column with neither is the slice's value. Each takes a `format`. Without `columns`, the table is the value and its share, with no header.
   - `times: typicalFine` multiplies the column's value by the `<category> · typicalFine` series' value (missed times the fine, in the column's `format`); a category without that series shows the value alone in `fallbackFormat` (a plain figure unless set). Into Other go the products, summed.
   - `timeInParts: true` writes the value as a time in parts: `45m`, `6h 46m`, `7h`, and past two days `2d 3h`, the minutes rounded. The value is in minutes, or in seconds or hours when the column's `format.unit` says so.
+- `nameTitle`: a header over the slices' names (`Kind`); none unless set.
 - `limit`: at most this many slices; past it the smallest fold into Other. No folding unless set.
 - `format` formats the slices' values in the table and tooltips (any Perses format); without a format a figure is written in full, `1,099`.
 - `layout`: `side` (the default) puts the table beside the donut, which is square and as large as the panel's height allows; narrower than 300px the table goes under it. `stacked` puts the donut on top, at the left, and the table across the whole width under it.
@@ -39,6 +40,7 @@ Violations by kind, the table under the donut, and what went uncited at the kind
 ```yaml
 value: count
 layout: stacked
+nameTitle: Kind
 size: { inner: 64%, outer: 96%, padAngle: 1, max: 168, edge: 0 }
 dividers: false
 center: { label: violations, fontSize: 18, fontWeight: 700, caps: false }

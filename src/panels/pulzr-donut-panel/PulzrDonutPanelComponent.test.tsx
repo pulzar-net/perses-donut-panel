@@ -71,6 +71,7 @@ describe('PulzrDonutPanelComponent', () => {
         value: 'count',
         names: { expired: 'Expired meter', overstay: 'Overstay' },
         layout: 'stacked',
+        nameTitle: 'Kind',
         size: { inner: '64%', outer: '96%', padAngle: 1, max: 168, edge: 0 },
         dividers: false,
         center: { label: 'violations', fontSize: 18, fontWeight: 700, caps: false },
@@ -91,12 +92,12 @@ describe('PulzrDonutPanelComponent', () => {
     });
     expect(screen.getByText('224')).toHaveStyle({ fontSize: '18px', fontWeight: '700' });
     expect(screen.getAllByRole('row').map((r) => r.textContent)).toEqual([
-      'CountShareCitedMissed',
+      'KindCountShareCitedMissed',
       'Expired meter20089%150$1,750.00',
       'Overstay2411%204',
     ]);
     const grid = container.firstElementChild as HTMLElement;
-    expect(grid).toHaveStyle({ gridTemplateColumns: 'minmax(0, 1fr)', justifyItems: 'start' });
+    expect(grid).toHaveStyle({ gridTemplateColumns: 'minmax(0, 1fr)', justifyItems: 'start', alignContent: 'start' });
     expect(grid.firstElementChild).toHaveStyle({ width: '168px', height: '168px' });
     expect(screen.getByText('violations')).toHaveStyle({ fontSize: '10.5px', textTransform: 'none' });
     expect(screen.getByText('Overstay').closest('td')).toHaveStyle({ height: '26px', borderBottomStyle: 'none' });
