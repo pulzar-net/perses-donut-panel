@@ -1,0 +1,16 @@
+{
+  "kind": "PulzrDonutPanel",
+  "spec": {
+    "value": "amount",
+    "format": { "unit": "decimal", "decimalPlaces": 0 },
+    "names": { "apple_pay": "Apple Pay", "card": "Card" },
+    "colors": { "card": "#6366f1" },
+    "center": { "series": "people", "label": "People" },
+    "columns": [
+      { "title": "Paid" },
+      { "title": "Share", "share": true },
+      { "title": "People", "field": "payers", "format": { "unit": "decimal", "shortValues": false } }
+    ],
+    "limit": 6
+  }
+}

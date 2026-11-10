@@ -1,0 +1,13 @@
+{
+  "kind": "PulzrDonutPanel",
+  "spec": {
+    "value": "count",
+    "center": { "label": "violations" },
+    "columns": [
+      { "title": "Count" },
+      { "title": "Share", "share": true },
+      { "title": "Cited", "field": "cited" },
+      { "title": "Missed", "field": "missed" }
+    ]
+  }
+}
