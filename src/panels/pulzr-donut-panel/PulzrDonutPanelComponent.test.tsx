@@ -38,7 +38,11 @@ describe('PulzrDonutPanelComponent', () => {
       },
     });
     expect(screen.getByText('1,099')).toBeInTheDocument();
-    expect(screen.getByText('People', { selector: 'span' })).toBeInTheDocument();
+    expect(screen.getByText('People', { selector: 'span' })).toHaveStyle({
+      fontSize: '10px',
+      textTransform: 'uppercase',
+    });
+    expect(screen.getByText('Card').closest('td')).toHaveStyle({ height: '24px' });
     expect(screen.getAllByRole('row').map((r) => r.textContent)).toEqual([
       'PaidSharePeople',
       'Card68068%700',
@@ -67,8 +71,9 @@ describe('PulzrDonutPanelComponent', () => {
         value: 'count',
         names: { expired: 'Expired meter', overstay: 'Overstay' },
         layout: 'stacked',
-        size: { inner: '64%', outer: '96%', padAngle: 1, max: 168 },
-        center: { label: 'violations', fontSize: 18, fontWeight: 700 },
+        size: { inner: '64%', outer: '96%', padAngle: 1, max: 168, edge: 0 },
+        dividers: false,
+        center: { label: 'violations', fontSize: 18, fontWeight: 700, caps: false },
         columns: [
           { title: 'Count' },
           { title: 'Share', share: true },
@@ -93,6 +98,8 @@ describe('PulzrDonutPanelComponent', () => {
     const grid = container.firstElementChild as HTMLElement;
     expect(grid).toHaveStyle({ gridTemplateColumns: 'minmax(0, 1fr)', justifyItems: 'start' });
     expect(grid.firstElementChild).toHaveStyle({ width: '168px', height: '168px' });
+    expect(screen.getByText('violations')).toHaveStyle({ fontSize: '10.5px', textTransform: 'none' });
+    expect(screen.getByText('Overstay').closest('td')).toHaveStyle({ height: '26px', borderBottomStyle: 'none' });
   });
 
   it('says No data without slices', () => {

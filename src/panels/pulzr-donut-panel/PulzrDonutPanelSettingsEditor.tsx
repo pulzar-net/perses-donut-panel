@@ -1,4 +1,4 @@
-import { MenuItem, TextField, Typography } from '@mui/material';
+import { FormControlLabel, MenuItem, Switch, TextField, Typography } from '@mui/material';
 import { FormatControls, OptionsEditorColumn, OptionsEditorGrid, OptionsEditorGroup } from '@perses-dev/components';
 import type { OptionsEditorProps } from '@perses-dev/plugin-system';
 import type { ReactElement } from 'react';
@@ -72,6 +72,15 @@ export function PulzrDonutPanelSettingsEditor({
             slotProps={{ htmlInput: { min: 100, max: 1000, step: 50 } }}
             onChange={(e) => center({ fontWeight: number(e.target.value) })}
           />
+          <FormControlLabel
+            label="Label in capitals"
+            control={
+              <Switch
+                checked={value.center?.caps !== false}
+                onChange={(e) => center({ caps: e.target.checked ? undefined : false })}
+              />
+            }
+          />
         </OptionsEditorGroup>
         <OptionsEditorGroup title="Donut">
           <TextField
@@ -115,6 +124,24 @@ export function PulzrDonutPanelSettingsEditor({
             value={value.size?.max ?? ''}
             slotProps={{ htmlInput: { min: 1 } }}
             onChange={(e) => size({ max: number(e.target.value) })}
+          />
+          <TextField
+            size="small"
+            type="number"
+            label="Edge"
+            helperText="The card-colored edge round each slice, in px; 2 unless set."
+            value={value.size?.edge ?? ''}
+            slotProps={{ htmlInput: { min: 0 } }}
+            onChange={(e) => size({ edge: number(e.target.value) })}
+          />
+          <FormControlLabel
+            label="Lines between the table's rows"
+            control={
+              <Switch
+                checked={value.dividers !== false}
+                onChange={(e) => onChange({ ...value, dividers: e.target.checked ? undefined : false })}
+              />
+            }
           />
         </OptionsEditorGroup>
       </OptionsEditorColumn>

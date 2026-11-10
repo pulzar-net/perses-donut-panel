@@ -48,7 +48,7 @@ export function PulzrDonutPanelComponent({
           startAngle: 0,
           clockwise: false,
           padAngle: slices.length > 1 ? (spec.size?.padAngle ?? 1.5) : 0,
-          itemStyle: { borderColor: theme.palette.background.default, borderWidth: 2 },
+          itemStyle: { borderColor: theme.palette.background.default, borderWidth: spec.size?.edge ?? 2 },
           label: { show: false },
           labelLine: { show: false },
           emphasis: { scale: false },
@@ -86,6 +86,7 @@ export function PulzrDonutPanelComponent({
   if (stacked) justifyItems = 'start';
   else if (narrow) justifyItems = 'center';
   const columns = columnsOf(spec);
+  const dividers = spec.dividers !== false;
   const centerFormat = spec.center?.format ?? spec.format ?? PLAIN;
   const head = { fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: muted };
 
@@ -125,8 +126,10 @@ export function PulzrDonutPanelComponent({
               component="span"
               sx={{
                 ...head,
-                fontWeight: 600,
-                letterSpacing: '0.06em',
+                // As written, without caps: the kinds card's label.
+                ...(spec.center.caps === false
+                  ? { fontSize: 10.5, fontWeight: 400, letterSpacing: 'normal', textTransform: 'none' }
+                  : { fontWeight: 600, letterSpacing: '0.06em' }),
                 lineHeight: 1.3,
                 maxWidth: '60%',
                 textAlign: 'center',
@@ -142,14 +145,16 @@ export function PulzrDonutPanelComponent({
           component="table"
           sx={{
             width: '100%',
-            borderCollapse: 'collapse',
+            // Without dividers, rows of 26px 2px apart, as the kinds card's list.
+            borderCollapse: dividers ? 'collapse' : 'separate',
+            borderSpacing: dividers ? undefined : '0 2px',
             fontSize: 12,
             '& th': { ...head, height: 24, padding: '0 8px', textAlign: 'right' },
             '& td': {
-              height: 24,
+              height: dividers ? 24 : 26,
               padding: '0 8px',
               color: 'text.secondary',
-              borderBottom: `1px solid ${theme.palette.divider}`,
+              borderBottom: dividers ? `1px solid ${theme.palette.divider}` : 'none',
               whiteSpace: 'nowrap',
               textAlign: 'right',
               fontVariantNumeric: 'tabular-nums',

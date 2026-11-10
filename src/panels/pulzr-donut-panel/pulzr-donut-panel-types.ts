@@ -28,15 +28,25 @@ export interface PulzrDonutPanelOptions {
   /** A color per category, any CSS color; the theme's palette for the rest. */
   colors?: Record<string, string>;
   /** The figure in the middle: the named series' last value, else the total of the slices. */
-  center?: { series?: string; label?: string; format?: FormatOptions; fontSize?: number; fontWeight?: number };
+  center?: {
+    series?: string;
+    label?: string;
+    format?: FormatOptions;
+    fontSize?: number;
+    fontWeight?: number;
+    /** The label in capitals, as revenue draws it; false: as written, as the kinds card draws it. True unless set. */
+    caps?: boolean;
+  };
   /** The table's columns; the value and its share unless set. */
   columns?: DonutColumn[];
   /** At most this many slices: past it the smallest fold into Other. */
   limit?: number;
   /** `side`: the table beside the donut; `stacked`: the donut on top, the table under it. `side` unless set. */
   layout?: 'side' | 'stacked';
-  /** The donut's radii as percentages (62% and 100% unless set), the gap between slices in degrees, its largest diameter in px. */
-  size?: { inner?: string; outer?: string; padAngle?: number; max?: number };
+  /** The donut's radii as percentages (62% and 100% unless set), the gap between slices in degrees, its largest diameter in px, the card-colored edge round each slice in px (2 unless set). */
+  size?: { inner?: string; outer?: string; padAngle?: number; max?: number; edge?: number };
+  /** A line under each row of the table; true unless set. */
+  dividers?: boolean;
 }
 
 export type PulzrDonutPanelProps = PanelProps<PulzrDonutPanelOptions, TimeSeriesData>;

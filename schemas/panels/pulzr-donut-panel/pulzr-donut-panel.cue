@@ -21,6 +21,8 @@ spec: close({
 		format?:     common.#format
 		fontSize?:   number & >0
 		fontWeight?: int & >=100 & <=1000
+		// The label in capitals; false: as written.
+		caps?: bool
 	})
 	// The table's columns after each slice's name: its share, a field's value, or its value.
 	columns?: [...close({
@@ -44,5 +46,9 @@ spec: close({
 		outer?:    =~"^[0-9]+(\\.[0-9]+)?%$"
 		padAngle?: number & >=0
 		max?:      number & >0
+		// The card-colored edge round each slice, in px.
+		edge?: number & >=0
 	})
+	// A line under each row of the table.
+	dividers?: bool
 })

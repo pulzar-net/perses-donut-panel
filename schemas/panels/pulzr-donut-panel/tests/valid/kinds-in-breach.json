@@ -3,8 +3,9 @@
   "spec": {
     "value": "count",
     "layout": "stacked",
-    "size": { "inner": "64%", "outer": "96%", "padAngle": 1, "max": 168 },
-    "center": { "label": "violations", "fontSize": 18, "fontWeight": 700 },
+    "size": { "inner": "64%", "outer": "96%", "padAngle": 1, "max": 168, "edge": 0 },
+    "dividers": false,
+    "center": { "label": "violations", "fontSize": 18, "fontWeight": 700, "caps": false },
     "columns": [
       { "title": "Count" },
       { "title": "Share", "share": true },
