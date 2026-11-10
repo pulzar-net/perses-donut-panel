@@ -9,6 +9,12 @@ export interface DonutColumn {
   field?: string;
   /** The slice's share of the total, a whole percent. */
   share?: boolean;
+  /** The value times the `<category> · <times>` series' value: missed times the fine. */
+  times?: string;
+  /** With `times`, the format of the value alone when the category has no `times` value. */
+  fallbackFormat?: FormatOptions;
+  /** A time in parts from the value in `format.unit` (seconds, minutes or hours; minutes unless set): `6h 46m`. */
+  timeInParts?: boolean;
   format?: FormatOptions;
 }
 
@@ -22,11 +28,15 @@ export interface PulzrDonutPanelOptions {
   /** A color per category, any CSS color; the theme's palette for the rest. */
   colors?: Record<string, string>;
   /** The figure in the middle: the named series' last value, else the total of the slices. */
-  center?: { series?: string; label?: string; format?: FormatOptions };
+  center?: { series?: string; label?: string; format?: FormatOptions; fontSize?: number; fontWeight?: number };
   /** The table's columns; the value and its share unless set. */
   columns?: DonutColumn[];
   /** At most this many slices: past it the smallest fold into Other. */
   limit?: number;
+  /** `side`: the table beside the donut; `stacked`: the donut on top, the table under it. `side` unless set. */
+  layout?: 'side' | 'stacked';
+  /** The donut's radii as percentages (62% and 100% unless set), the gap between slices in degrees, its largest diameter in px. */
+  size?: { inner?: string; outer?: string; padAngle?: number; max?: number };
 }
 
 export type PulzrDonutPanelProps = PanelProps<PulzrDonutPanelOptions, TimeSeriesData>;

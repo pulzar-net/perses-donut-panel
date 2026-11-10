@@ -16,7 +16,7 @@ registerECharts([PieChart, TooltipComponent, CanvasRenderer]);
 /** Narrower than this, the table goes under the donut. */
 const NARROW = 300;
 
-const keyOf = (c: DonutColumn): string => `${c.title}:${c.field ?? (c.share ? '%' : '')}`;
+const keyOf = (c: DonutColumn): string => `${c.title}:${c.field ?? (c.share ? '%' : '')}:${c.times ?? ''}`;
 
 /** Shares of a whole: a donut with a figure in the middle, and a table of its slices beside it. */
 export function PulzrDonutPanelComponent({
@@ -44,10 +44,10 @@ export function PulzrDonutPanelComponent({
         {
           type: 'pie',
           // As the dashboard's donuts draw: from three o'clock, anticlockwise, a gap and a card-colored edge between slices.
-          radius: ['62%', '100%'],
+          radius: [spec.size?.inner ?? '62%', spec.size?.outer ?? '100%'],
           startAngle: 0,
           clockwise: false,
-          padAngle: slices.length > 1 ? 1.5 : 0,
+          padAngle: slices.length > 1 ? (spec.size?.padAngle ?? 1.5) : 0,
           itemStyle: { borderColor: theme.palette.background.default, borderWidth: 2 },
           label: { show: false },
           labelLine: { show: false },
@@ -57,7 +57,7 @@ export function PulzrDonutPanelComponent({
         },
       ],
     }),
-    [slices, total, spec.format, theme],
+    [slices, total, spec.format, spec.size, theme],
   );
 
   if (slices.length === 0) {
@@ -70,9 +70,21 @@ export function PulzrDonutPanelComponent({
 
   const width = contentDimensions?.width ?? 400;
   const height = contentDimensions?.height ?? 180;
+  const stacked = spec.layout === 'stacked';
   const narrow = width < NARROW;
-  // Square, as large as the panel's height allows in its column: at least 110px and 38% of the width beside the table.
-  const size = Math.floor(narrow ? Math.min(width, 140) : Math.min(height, Math.max(110, width * 0.38)));
+  const max = spec.size?.max ?? Infinity;
+  // Square. Stacked, its largest size (140px unless set) within the width; beside the table, as large as the
+  // panel's height allows in its column: at least 110px and 38% of the width.
+  let size: number;
+  if (stacked) size = Math.min(width, spec.size?.max ?? 140);
+  else if (narrow) size = Math.min(width, 140, max);
+  else size = Math.min(height, Math.max(110, width * 0.38), max);
+  size = Math.floor(size);
+  const under = stacked || narrow;
+  // Stacked, the donut keeps to the left, as the dashboard's kinds card draws it; narrow, it is centred.
+  let justifyItems: string | undefined;
+  if (stacked) justifyItems = 'start';
+  else if (narrow) justifyItems = 'center';
   const columns = columnsOf(spec);
   const centerFormat = spec.center?.format ?? spec.format ?? PLAIN;
   const head = { fontSize: 10, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: muted };
@@ -81,13 +93,13 @@ export function PulzrDonutPanelComponent({
     <Box
       sx={{
         display: 'grid',
-        gridTemplateColumns: narrow ? 'minmax(0, 1fr)' : `${size}px minmax(0, 1fr)`,
-        justifyItems: narrow ? 'center' : undefined,
+        gridTemplateColumns: under ? 'minmax(0, 1fr)' : `${size}px minmax(0, 1fr)`,
+        justifyItems,
         alignItems: 'center',
         gap: '16px',
         width,
         height,
-        overflowY: narrow ? 'auto' : 'hidden',
+        overflowY: under ? 'auto' : 'hidden',
         boxSizing: 'border-box',
       }}
     >
@@ -99,8 +111,8 @@ export function PulzrDonutPanelComponent({
           <Typography
             component="span"
             sx={{
-              fontSize: 15,
-              fontWeight: 650,
+              fontSize: spec.center?.fontSize ?? 15,
+              fontWeight: spec.center?.fontWeight ?? 650,
               lineHeight: 1.3,
               color: 'text.primary',
               fontVariantNumeric: 'tabular-nums',
@@ -125,7 +137,7 @@ export function PulzrDonutPanelComponent({
           )}
         </Stack>
       </Box>
-      <Box sx={{ width: '100%', maxHeight: narrow ? undefined : '100%', overflowY: 'auto', minWidth: 0 }}>
+      <Box sx={{ width: '100%', maxHeight: under ? undefined : '100%', overflowY: 'auto', minWidth: 0 }}>
         <Box
           component="table"
           sx={{

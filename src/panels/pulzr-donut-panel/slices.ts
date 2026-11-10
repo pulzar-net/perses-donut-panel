@@ -77,7 +77,15 @@ export function donutOf(
   for (const [key, value] of values) {
     if (value <= 0) continue;
     const color = spec.colors?.[key] ?? palette[i++ % Math.max(1, palette.length)] ?? otherColor;
-    slices.push({ key, name: spec.names?.[key] ?? key, value, color, fields: fields.get(key) ?? {} });
+    const own = { ...fields.get(key) };
+    // Each `times` column's product, kept as a field so that Other sums the products, not the factors.
+    for (const c of spec.columns ?? []) {
+      if (c.times === undefined) continue;
+      const base = c.field === undefined ? value : own[c.field];
+      const by = own[c.times];
+      if (base !== undefined && by !== undefined) own[productOf(c)] = base * by;
+    }
+    slices.push({ key, name: spec.names?.[key] ?? key, value, color, fields: own });
   }
   slices.sort((a, b) => b.value - a.value);
 
@@ -105,12 +113,36 @@ export function columnsOf(spec: PulzrDonutPanelOptions): DonutColumn[] {
   return spec.columns ?? [{ title: '' }, { title: '', share: true }];
 }
 
-/** A slice's cell in a column: its share, a field's value, or its value; `–` for a field it lacks. */
+/** Where a `times` column's product is kept among a slice's fields. */
+const productOf = (c: DonutColumn): string => `${c.field ?? ''} × ${c.times}`;
+
+const TO_MINUTES: Record<string, number> = { seconds: 1 / 60, minutes: 1, hours: 60 };
+
+/**
+ * A time in parts, as people say it: 45m, 6h 46m, 7h, and past two days 2d 3h, the minutes being noise
+ * there. From minutes unless the unit is seconds or hours.
+ */
+export function timeInParts(value: number, unit: string | undefined): string {
+  const minutes = Math.round(value * (TO_MINUTES[unit ?? ''] ?? 1));
+  if (minutes < 60) return `${minutes}m`;
+  const h = Math.floor(minutes / 60);
+  if (h < 48) return minutes % 60 ? `${h}h ${minutes % 60}m` : `${h}h`;
+  return h % 24 ? `${Math.floor(h / 24)}d ${h % 24}h` : `${Math.floor(h / 24)}d`;
+}
+
+/**
+ * A slice's cell in a column: its share, a field's value, or its value; `–` for a field it lacks. With
+ * `times`, that times the `times` field, else the value alone in the fallback format.
+ */
 export function cell(slice: Slice, total: number, column: DonutColumn, spec: PulzrDonutPanelOptions): string {
   if (column.share) return share(slice.value, total);
-  if (column.field !== undefined) {
-    const v = slice.fields[column.field];
-    return v === undefined ? '–' : formatValue(v, column.format ?? PLAIN);
+  let v = column.field === undefined ? slice.value : slice.fields[column.field];
+  let format = column.format ?? (column.field === undefined ? spec.format : undefined) ?? PLAIN;
+  if (column.times !== undefined) {
+    const product = slice.fields[productOf(column)];
+    if (product !== undefined) v = product;
+    else format = column.fallbackFormat ?? PLAIN;
   }
-  return formatValue(slice.value, column.format ?? spec.format ?? PLAIN);
+  if (v === undefined) return '–';
+  return column.timeInParts ? timeInParts(v, format.unit) : formatValue(v, format);
 }

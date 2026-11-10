@@ -1,4 +1,4 @@
-import { TextField, Typography } from '@mui/material';
+import { MenuItem, TextField, Typography } from '@mui/material';
 import { FormatControls, OptionsEditorColumn, OptionsEditorGrid, OptionsEditorGroup } from '@perses-dev/components';
 import type { OptionsEditorProps } from '@perses-dev/plugin-system';
 import type { ReactElement } from 'react';
@@ -14,6 +14,8 @@ export function PulzrDonutPanelSettingsEditor({
 }: OptionsEditorProps<PulzrDonutPanelOptions>): ReactElement {
   const center = (patch: Partial<NonNullable<PulzrDonutPanelOptions['center']>>): void =>
     onChange({ ...value, center: { ...value.center, ...patch } });
+  const size = (patch: Partial<NonNullable<PulzrDonutPanelOptions['size']>>): void =>
+    onChange({ ...value, size: { ...value.size, ...patch } });
   return (
     <OptionsEditorGrid>
       <OptionsEditorColumn>
@@ -51,6 +53,68 @@ export function PulzrDonutPanelSettingsEditor({
             label="Label"
             value={value.center?.label ?? ''}
             onChange={(e) => center({ label: text(e.target.value) })}
+          />
+          <TextField
+            size="small"
+            type="number"
+            label="Font size"
+            helperText="In px; 15 unless set."
+            value={value.center?.fontSize ?? ''}
+            slotProps={{ htmlInput: { min: 1 } }}
+            onChange={(e) => center({ fontSize: number(e.target.value) })}
+          />
+          <TextField
+            size="small"
+            type="number"
+            label="Font weight"
+            helperText="650 unless set."
+            value={value.center?.fontWeight ?? ''}
+            slotProps={{ htmlInput: { min: 100, max: 1000, step: 50 } }}
+            onChange={(e) => center({ fontWeight: number(e.target.value) })}
+          />
+        </OptionsEditorGroup>
+        <OptionsEditorGroup title="Donut">
+          <TextField
+            select
+            size="small"
+            label="Layout"
+            value={value.layout ?? 'side'}
+            onChange={(e) => onChange({ ...value, layout: e.target.value === 'stacked' ? 'stacked' : undefined })}
+          >
+            <MenuItem value="side">Table beside the donut</MenuItem>
+            <MenuItem value="stacked">Table under the donut</MenuItem>
+          </TextField>
+          <TextField
+            size="small"
+            label="Inner radius"
+            helperText="A percentage; 62% unless set."
+            value={value.size?.inner ?? ''}
+            onChange={(e) => size({ inner: text(e.target.value) })}
+          />
+          <TextField
+            size="small"
+            label="Outer radius"
+            helperText="A percentage; 100% unless set."
+            value={value.size?.outer ?? ''}
+            onChange={(e) => size({ outer: text(e.target.value) })}
+          />
+          <TextField
+            size="small"
+            type="number"
+            label="Gap"
+            helperText="Between slices, in degrees; 1.5 unless set."
+            value={value.size?.padAngle ?? ''}
+            slotProps={{ htmlInput: { min: 0, step: 0.5 } }}
+            onChange={(e) => size({ padAngle: number(e.target.value) })}
+          />
+          <TextField
+            size="small"
+            type="number"
+            label="Largest size"
+            helperText="The donut's diameter at most, in px."
+            value={value.size?.max ?? ''}
+            slotProps={{ htmlInput: { min: 1 } }}
+            onChange={(e) => size({ max: number(e.target.value) })}
           />
         </OptionsEditorGroup>
       </OptionsEditorColumn>

@@ -2,12 +2,20 @@
   "kind": "PulzrDonutPanel",
   "spec": {
     "value": "count",
-    "center": { "label": "violations" },
+    "layout": "stacked",
+    "size": { "inner": "64%", "outer": "96%", "padAngle": 1, "max": 168 },
+    "center": { "label": "violations", "fontSize": 18, "fontWeight": 700 },
     "columns": [
       { "title": "Count" },
       { "title": "Share", "share": true },
       { "title": "Cited", "field": "cited" },
-      { "title": "Missed", "field": "missed" }
+      {
+        "title": "Missed",
+        "field": "missed",
+        "times": "typicalFine",
+        "format": { "unit": "usd", "decimalPlaces": 2 },
+        "fallbackFormat": { "unit": "decimal", "shortValues": false }
+      }
     ]
   }
 }
