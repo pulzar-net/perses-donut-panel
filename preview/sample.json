@@ -1,0 +1,115 @@
+{
+ "$schema": "https://raw.githubusercontent.com/pulzar-net/perses-panel-preview/main/sample.schema.json",
+ "timeRange": {
+  "start": "2026-01-14T00:00:00Z",
+  "end": "2026-01-15T00:00:00Z"
+ },
+ "panel": {
+  "kind": "Panel",
+  "spec": {
+   "display": {
+    "name": "Payments by method"
+   },
+   "plugin": {
+    "kind": "PulzrDonutPanel",
+    "spec": {
+     "value": "amount",
+     "format": {
+      "unit": "usd",
+      "decimalPlaces": 0
+     },
+     "names": {
+      "card": "Card",
+      "apple_pay": "Apple Pay",
+      "cash": "Cash",
+      "transfer": "Transfer"
+     },
+     "colors": {
+      "card": "#6366f1",
+      "apple_pay": "#10b981",
+      "cash": "#f59e0b",
+      "transfer": "#64748b"
+     },
+     "center": {
+      "series": "people",
+      "label": "People"
+     },
+     "columns": [
+      {
+       "title": "Paid"
+      },
+      {
+       "title": "Share",
+       "share": true
+      },
+      {
+       "title": "People",
+       "field": "payers"
+      }
+     ],
+     "limit": 6
+    }
+   }
+  }
+ },
+ "queries": [
+  {
+   "series": [
+    {
+     "name": "card \u00b7 amount",
+     "points": [
+      5240
+     ]
+    },
+    {
+     "name": "apple_pay \u00b7 amount",
+     "points": [
+      2310
+     ]
+    },
+    {
+     "name": "cash \u00b7 amount",
+     "points": [
+      880
+     ]
+    },
+    {
+     "name": "transfer \u00b7 amount",
+     "points": [
+      450
+     ]
+    },
+    {
+     "name": "card \u00b7 payers",
+     "points": [
+      312
+     ]
+    },
+    {
+     "name": "apple_pay \u00b7 payers",
+     "points": [
+      141
+     ]
+    },
+    {
+     "name": "cash \u00b7 payers",
+     "points": [
+      52
+     ]
+    },
+    {
+     "name": "transfer \u00b7 payers",
+     "points": [
+      19
+     ]
+    },
+    {
+     "name": "people",
+     "points": [
+      524
+     ]
+    }
+   ]
+  }
+ ]
+}

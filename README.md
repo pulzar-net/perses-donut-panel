@@ -1,5 +1,10 @@
 # Donut panel for Perses
 
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://github.com/pulzar-net/perses-donut-panel/releases/latest/download/preview-dark.png">
+  <img alt="The PulzrDonutPanel: payments by method as a donut with a table of amounts, shares and people" src="https://github.com/pulzar-net/perses-donut-panel/releases/latest/download/preview-light.png">
+</picture>
+
 `PulzrDonutPanel` draws shares of a whole: a donut with a figure in the middle, and a table of its slices beside it. How people paid, with the people in the middle; violations by kind, with what was cited and missed.
 
 ```yaml
